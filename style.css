@@ -1,13 +1,23 @@
 body {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 #todo-list-container {
+    border: solid 1px;
+    border-radius: 50px;
+    border-width: 2px;
+    border-color: aqua;
+    background-color: aquamarine;
     width: 100%;
     max-width: 400px;
+    margin: 0;
+    text-align: center;
 }
+
 
 ul {
     list-style: none;

@@ -50,7 +50,7 @@ const renderItem = () => {
         item.appendChild(removeBtn);
         ul.appendChild(item);
     });
-    document.body.appendChild(ul);
+    // document.body.appendChild(ul);
 };
 
 // render components
