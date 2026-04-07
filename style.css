@@ -4,26 +4,92 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: #f0f2f5;
+    /* Light background for better contrast */
+    font-family: Arial, sans-serif;
+    /* Modern font */
+    margin: 0;
 }
 
 #todo-list-container {
     border: solid 1px;
-    border-radius: 50px;
+    border-radius: 10px;
     border-width: 2px;
-    border-color: aqua;
-    background-color: aquamarine;
+    border-color: #00bcd4;
+    /* Softer aqua color */
+    background-color: #e0f7fa;
+    /* Light aqua background */
     width: 100%;
     max-width: 400px;
     margin: 0;
     text-align: center;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
 }
 
+h1 {
+    font-size: 24px;
+    color: #00796b;
+    /* Darker teal for contrast */
+    margin-bottom: 20px;
+}
+
+#input-field {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+#input-field:focus {
+    border: 1.5px solid #007bff;
+    /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 
 ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-li {
+li.item-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Space between text and button */
     margin-bottom: 8px;
+    border: solid 1px;
+    border-radius: 5px;
+    background-color: #b2ebf2;
+    /* Softer blue */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 16px;
+    transition: background-color 0.2s;
+}
+
+li.item-list:hover {
+    background-color: #80deea;
+    /* Slightly darker blue on hover */
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #ff4d4f;
+    /* Red color for delete button */
+    transition: color 0.2s;
+}
+
+.remove-btn:hover {
+    color: #d90429;
+    /* Darker red on hover */
 }

@@ -1,4 +1,5 @@
-const todo = [];
+const saved = localStorage.getItem("todo");
+const todo = saved ? JSON.parse(saved) : [];
 
 // processing input
 const handleInput = () => {
@@ -11,8 +12,9 @@ const handleInput = () => {
                 alert("The field is empty!");
                 return;
             }
-            
+
             todo.push(event.target.value.trim());
+            localStorage.setItem("todo", JSON.stringify(todo));
             renderItem();
             event.target.value = "";
         }
@@ -21,12 +23,12 @@ const handleInput = () => {
 
 // display todo item
 const renderItem = () => {
-    const ul = document.getElementById("item-list");
+    const ul = document.getElementById("list");
 
     // check if there are any todo in the list
     if (todo.length === 0) {
-        const itemList = document.getElementById("item-list");
-        itemList.innerHTML = "No todo? You are free!!";
+        const list = document.getElementById("list");
+        list.innerHTML = "No todo? You are free!!";
         return;
     }
     // remove old item for new item
@@ -35,22 +37,24 @@ const renderItem = () => {
     // create new li every loop
     todo.forEach((i) => {
         const item = document.createElement("li");
+        item.className = "item-list";
         item.innerText = i;
 
         const removeBtn = document.createElement("button");
+        removeBtn.className = "remove-btn";
         removeBtn.innerHTML = "🗑️";
 
-        removeBtn.addEventListener('click',() => {
+        removeBtn.addEventListener('click', () => {
             // find index of item
             const index = todo.findIndex(item => item === i);
             todo.splice(index, 1); // remove one item
+            localStorage.setItem("todo", JSON.stringify(todo));
             renderItem();
         });
 
         item.appendChild(removeBtn);
         ul.appendChild(item);
     });
-    // document.body.appendChild(ul);
 };
 
 // render components
