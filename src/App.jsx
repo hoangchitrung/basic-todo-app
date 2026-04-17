@@ -1,70 +1,21 @@
-import { useState } from "react";
-import "./App.css"
+import { useEffect, useState } from "react";
 
 function App() {
-    const [todos, setTodos] = useState(["Study React"]);
+    const [todos, setTodos] = useState(() => {
+        try {
+            const saved = localStorage.getItem("todos");
+
+            return saved ? JSON.parse(saved) : [];
+        } catch {
+            return [];
+        }
+    });
 
     const [inputValue, setInputValue] = useState(""); // set state for input tag
-    const [editingIndex, setEditingIndex] = useState(null); // save editing index
-    const [editingValue, setEditingValue] = useState("");
 
-    const noTodos = () => {
-        if (todos.length === 0) {
-            return <p>Nothing todo. You are free! 🌹</p>;
-        } else {
-            return (
-                <ul className="todo-list">
-                    {todos.map((todo, index) => {
-                        return (
-                            <li className="list"
-                                key={index}
-                                onClick={() => handleUpdate(index)}>
-
-                                {editingIndex === index ? (
-                                    <input
-                                        value={editingValue}
-                                        onChange={(e) => setEditingValue(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter") {
-                                                e.preventDefault();
-                                                handleSaveUpdate();
-                                            }
-                                        }}
-                                        autoFocus />
-                                ) : (todo)}
-
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        handleRemove(index);
-                                    }}>
-                                    🗑️
-                                </button>
-                            </li>
-                        );
-                    })}
-                </ul>
-            );
-        }
-    };
-
-    const handleSaveUpdate = () => {
-        if (editingValue.trim() === "") {
-            return;
-        }
-
-        setTodos(prev => prev.map((item, index) => {
-            return index === editingIndex ? editingValue.trim() : item
-        }));
-
-        setEditingIndex(null);
-        setEditingValue("");
-    };
-
-    const handleUpdate = (index) => {
-        setEditingIndex(index);
-        setEditingValue(todos[index]);
-    };
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos))
+    }, [todos]);
 
     const handleRemove = (indexToRemove) => {
         setTodos((prevTodos) => {
@@ -78,25 +29,57 @@ function App() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         if (inputValue.trim() === "") {
             return;
         }
 
-        setTodos((prevTodos) => [...prevTodos, inputValue.trim()]);
+        setTodos((prevTodos) => [...prevTodos, { text: inputValue.trim(), completed: false }]);
         setInputValue("");
     };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <div className="todo-container">
-                <h1 className="todo-header">Todo list</h1>
+    const handleToggleCompleted = (indexToCompleted) => {
+        setTodos((oldTodo) => oldTodo.map((todo, index) => {
+            return index === indexToCompleted ? { ...todo, completed: !todo.completed } : todo
+        }));
+    }
 
-                <div className="input-field">
-                    <input type="text" value={inputValue} onChange={handleChange} autoFocus />
+    return (
+        <form className="min-h-screen grid place-items-center" onSubmit={handleSubmit}>
+            <div className="todo-container border-none shadow-lg rounded-xl p-5 bg-gray-100">
+                <h1 className="todo-header flex justify-center font-bold text-3xl pb-5">Todo</h1>
+
+                <div className="input-field mb-5 gap-2 flex">
+                    <input className="border-none shadow-lg rounded-lg w-80 p-2 bg-white" type="text" value={inputValue} onChange={handleChange} placeholder="Enter your todo here..." autoFocus />
+                    <button type="submit" className="border-none  rounded-lg p-2 bg-cyan-600 text-white">Add</button>
                 </div>
 
-                <div className="todo-list">{noTodos()}</div>
+                <div className="todo-list">{
+                    todos.length === 0 ?
+                        <p>Nothing todo. You are free! 🌹</p>
+                        :
+                        <ul className="todo-list">
+                            {todos.map((todo, index) => {
+                                return (
+                                    <li className="list flex justify-between border-none bg-white shadow-lg rounded-lg p-2 mt-2"
+                                        key={index}>
+                                        <div className="flex gap-2">
+                                            <input type="checkbox" checked={todo.completed} onChange={() => handleToggleCompleted(index)} />
+                                            <span className={todo.completed ? "line-through text-gray-400" : ""}>
+                                                {todo.text}
+                                            </span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                handleRemove(index);
+                                            }}>
+                                            🗑️
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                }</div>
             </div>
         </form>
     );
