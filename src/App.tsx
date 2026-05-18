@@ -9,31 +9,30 @@ function App() {
     saveTodos(todos);
   }, [todos]);
 
-  const handleRemove = (idToRemove) => {
-    setTodos((prevTodos) => {
-      return prevTodos.filter((todo) => todo.id !== idToRemove);
+  const handleRemove = (idToRemove: string) => {
+    setTodos((prevTodos: { id: string, text: string, completed: boolean }[]) => {
+      return prevTodos.filter((todo: { id: string, text: string, completed: boolean }) => todo.id !== idToRemove);
     });
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     return setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputValue.trim() === "") {
       return;
     }
 
-    setTodos((prevTodos) => [
-      ...prevTodos,
-      { id: crypto.randomUUID(), text: inputValue.trim(), completed: false },
+    setTodos((prevTodos: { id: string, text: string, completed: boolean }[]) => [
+      ...prevTodos, { id: crypto.randomUUID(), text: inputValue.trim(), completed: false },
     ]);
     setInputValue("");
   };
 
-  const handleToggleCompleted = (idToComplete) => {
-    setTodos((prevTodos) =>
+  const handleToggleCompleted = (idToComplete: string) => {
+    setTodos((prevTodos: { id: string, text: string, completed: boolean }[]) =>
       prevTodos.map((todo) => {
         return todo.id === idToComplete ? { ...todo, completed: !todo.completed } : todo;
       }));
@@ -52,7 +51,7 @@ function App() {
         <div className="todo-list">
           {todos.length === 0 ? (<p>Nothing todo. You are free! 🌹</p>) : (
             <ul className="todo-list">
-              {todos.map((todo) => {
+              {todos.map((todo: { id: string, text: string, completed: boolean }) => {
                 return (
                   <li className="list flex justify-between border-none bg-white shadow-lg rounded-lg p-2 mt-2" key={todo.id}>
                     <div className="flex gap-2">
