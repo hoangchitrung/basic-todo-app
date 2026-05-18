@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getTodos, saveTodos } from "./services/todoService";
+import React, { useEffect, useState } from "react";
+import { getTodos, saveTodos, Todo } from "./services/todoService";
 
 function App() {
   const [todos, setTodos] = useState(getTodos);
@@ -10,29 +10,29 @@ function App() {
   }, [todos]);
 
   const handleRemove = (idToRemove: string) => {
-    setTodos((prevTodos: { id: string, text: string, completed: boolean }[]) => {
-      return prevTodos.filter((todo: { id: string, text: string, completed: boolean }) => todo.id !== idToRemove);
+    setTodos((prevTodos: Todo[]) => {
+      return prevTodos.filter((todo: Todo) => todo.id !== idToRemove);
     });
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     return setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputValue.trim() === "") {
       return;
     }
 
-    setTodos((prevTodos: { id: string, text: string, completed: boolean }[]) => [
+    setTodos((prevTodos: Todo[]) => [
       ...prevTodos, { id: crypto.randomUUID(), text: inputValue.trim(), completed: false },
     ]);
     setInputValue("");
   };
 
   const handleToggleCompleted = (idToComplete: string) => {
-    setTodos((prevTodos: { id: string, text: string, completed: boolean }[]) =>
+    setTodos((prevTodos: Todo[]) =>
       prevTodos.map((todo) => {
         return todo.id === idToComplete ? { ...todo, completed: !todo.completed } : todo;
       }));

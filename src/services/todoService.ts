@@ -1,12 +1,14 @@
-export const getTodos = () => {
+export type Todo = { id: string, text: string, completed: boolean };
+
+export const getTodos = (): Todo[] => {
     try {
-        const saved: any = localStorage.getItem("todos");
+        const saved = localStorage.getItem("todos");
         return saved ? JSON.parse(saved) : [];
     } catch {
         return [];
     }
 };
 
-export const saveTodos = (todos: { id: string, text: string, completed: boolean }[]) => {
+export const saveTodos = (todos: Todo[]) => {
     localStorage.setItem("todos", JSON.stringify(todos));
 };
